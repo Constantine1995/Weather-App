@@ -65,16 +65,27 @@ class WeatherViewController: UIViewController {
         label.textAlignment = .center
         return label
     }()
-    
+
+    lazy var weatherManager = APIWeatherManager(apiKey: "55a266f7ba4e692310514bcba358d0f9")
+    let coordinates = Coordinates(latitude: 46.830290, longitude: 35.424191)
     override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let icon = WeatherIconManager.ClearDay.image
-        let currentWeather = CurrentWeather(temperature: 10.0, appearentTemperatur: 5.0, humidity: 30, pressure: 750, icon: icon)
-        
-        updateUIWith(currentWeather)
+        weatherManager.fetchCurrentWeatherWith(coordinates: coordinates) { (result) in
+            switch result {
+            case .Succes(let currentWeather):
+                self.updateUIWith(currentWeather)
+            case .Failure(let error as NSError):
+                let alertController = UIAlertController(title: "Unable to get data", message: "\(error.localizedDescription)", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+            default: break
+
+            }
+        }
         
         view.addSubview(locationLabel)
         view.addSubview(weatherIconImageView)

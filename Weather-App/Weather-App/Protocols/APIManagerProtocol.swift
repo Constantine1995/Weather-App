@@ -14,7 +14,6 @@ typealias JSONCompletionHandler = ([String: AnyObject]?, HTTPURLResponse?, Error
 protocol APIManagerProtocol {
     var sessionConfiguration: URLSessionConfiguration { get }
     var session: URLSession { get }
-    func JSONTaskWith(request: URLRequest, completionHandler: JSONCompletionHandler) -> JSONTask
-    func fetch<T>(request: URLRequest, parse: ([String: AnyObject]?) -> T?, completionHandler: (APIResult<T>) -> Void)
-    init(sessionConfiguration: URLSessionConfiguration)
+//    func JSONTaskWith(request: URLRequest, completionHandler: JSONCompletionHandler) -> JSONTask
+    func fetch<T: JSONDecodable>(request: URLRequest, parse: @escaping ([String: AnyObject]?) -> T?, completionHandler: @escaping (APIResult<T>) -> Void)
 }

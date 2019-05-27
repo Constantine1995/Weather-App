@@ -40,20 +40,23 @@ extension APIManagerProtocol {
         return dataTask
     }
     
-    func fetch<T>(request: URLRequest, parse: ([String: AnyObject]?) -> T?, completionHandler: (APIResult<T>) -> Void) {
+    func fetch<T>(request: URLRequest, parse: @escaping ([String: AnyObject]?) -> T?, completionHandler: @escaping (APIResult<T>) -> Void) {
         let dataTask = JSONTaskWith(request: request) { (json, response, error) in
-            guard let json = json else {
-                if let error = error {
+            DispatchQueue.main.async {
+                guard let json = json else {
+                    if let error = error {
+                        completionHandler(.Failure(error))
+                    }
+                    return
+                }
+                if let value = parse(json) {
+                    completionHandler(.Succes(value))
+                } else {
+                    let error = NSError(domain: WeatherNetworkingErrorDomain, code: 200, userInfo: nil)
                     completionHandler(.Failure(error))
                 }
-                return
             }
-            if let value = parse(json) {
-                completionHandler(.Succes(value))
-            } else {
-                let error = NSError(domain: WeatherNetworkingErrorDomain, code: 200, userInfo: nil)
-                completionHandler(.Failure(error))
-            }
-        }.resume
+        }
+        dataTask.resume()
     }
 }
