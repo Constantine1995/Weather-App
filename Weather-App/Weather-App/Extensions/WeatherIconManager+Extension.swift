@@ -5,5 +5,9 @@
 //  Created by mac on 5/27/19.
 //  Copyright © 2019 mac. All rights reserved.
 //
-
-import Foundation
+import UIKit
+extension WeatherIconManager {
+    var image: UIImage {
+        return UIImage(named: self.rawValue)!
+    }
+}

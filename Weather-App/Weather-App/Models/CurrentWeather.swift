@@ -7,3 +7,12 @@
 //
 
 import Foundation
+import UIKit
+
+struct CurrentWeather {
+    let temperature: Double
+    let appearentTemperatur: Double
+    let humidity: Double
+    let pressure: Double
+    let icon: UIImage
+}

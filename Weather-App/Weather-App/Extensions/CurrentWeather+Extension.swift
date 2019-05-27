@@ -24,5 +24,4 @@ extension CurrentWeather {
     var appearentTemperatureString: String {
         return "\(Int(appearentTemperatur)) ºC"
     }
-    
 }

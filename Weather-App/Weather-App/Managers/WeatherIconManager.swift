@@ -38,4 +38,3 @@ enum WeatherIconManager: String {
         }
     }
 }
-
