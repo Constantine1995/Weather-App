@@ -66,13 +66,15 @@ class WeatherViewController: UIViewController {
         return label
     }()
 
-    lazy var weatherManager = APIWeatherManager(apiKey: "55a266f7ba4e692310514bcba358d0f9")
+    lazy var weatherManager = APIWeatherManager(apiKey: Constant.apiKey)
+   
     let coordinates = Coordinates(latitude: 46.830290, longitude: 35.424191)
-    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         weatherManager.fetchCurrentWeatherWith(coordinates: coordinates) { (result) in
             switch result {
             case .Succes(let currentWeather):
@@ -94,17 +96,6 @@ class WeatherViewController: UIViewController {
         view.addSubview(appearentTemperatureLabel)
         
         setupView()
-        
-//        let urlString = "https://api.darksky.net/forecast/55a266f7ba4e692310514bcba358d0f9/37.8267,-122.4233"
-//        let baseURL = URL(string: "https://api.darksky.net/forecast/55a266f7ba4e692310514bcba358d0f9/")
-//        let fullURL = URL(string: "37.8267,-122.4233", relativeTo: baseURL)
-//        
-//        let sessionConfiguration = URLSessionConfiguration.default
-//        let session = URLSession(configuration: sessionConfiguration)
-//        let request = URLRequest(url: fullURL!)
-//        let dataTask = session.dataTask(with: fullURL) { (data, response, error) in
-//            
-//        }.resume()
     }
     
     func updateUIWith(_ currentWeather: CurrentWeather) {

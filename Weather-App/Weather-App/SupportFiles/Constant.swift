@@ -8,5 +8,6 @@
 
 import Foundation
 public struct Constant {
-    static let forecastBaseURL = "https://api.darksky.net/forecast/0123456789abcdef9876543210fedcba/42.3601,-71.0589"
+    static let baseURL = "https://api.forecast.io"
+    static let apiKey = "55a266f7ba4e692310514bcba358d0f9"
 }

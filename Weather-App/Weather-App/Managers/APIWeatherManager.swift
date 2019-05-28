@@ -10,11 +10,6 @@ import Foundation
 
 
 final class APIWeatherManager: APIManagerProtocol {
-//    func JSONTaskWith(request: URLRequest, completionHandler: ([String : AnyObject]?, HTTPURLResponse?, Error?) -> Void) -> JSONTask {
-//        completionHandler(nil, nil, nil)
-//    }
-//    
-
     
     let sessionConfiguration: URLSessionConfiguration
     
@@ -41,4 +36,5 @@ final class APIWeatherManager: APIManagerProtocol {
             } else { return nil }
         }, completionHandler: completionHandler)
     }
+    
 }

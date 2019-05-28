@@ -7,6 +7,7 @@
 //
 
 import Foundation
+
 extension APIManagerProtocol {
     func JSONTaskWith(request: URLRequest, completionHandler: @escaping JSONCompletionHandler) -> JSONTask {
         let dataTask = session.dataTask(with: request) { (data, response, error) in
