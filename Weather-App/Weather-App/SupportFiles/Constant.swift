@@ -7,6 +7,7 @@
 //
 
 import Foundation
+
 public struct Constant {
     static let baseURL = "https://api.forecast.io"
     static let apiKey = "55a266f7ba4e692310514bcba358d0f9"

@@ -8,7 +8,13 @@
 
 import UIKit
 
-class WeatherViewController: UIViewController {
+class WeatherViewController: UIViewController, WeatherViewDelegate {
+    
+    var presenter = WeatherPresenter()
+    
+    let coordinates = Coordinates(latitude: 46.830290, longitude: 35.424191)
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
     
     let locationLabel: UILabel = {
         let label = UILabel()
@@ -58,52 +64,46 @@ class WeatherViewController: UIViewController {
         return label
     }()
     
-    let appearentTemperatureLabel: UILabel = {
+    let apparentTemperatureLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Helvetica", size: 25)
         label.textColor = .white
         label.textAlignment = .center
         return label
     }()
-
-    lazy var weatherManager = APIWeatherManager(apiKey: Constant.apiKey)
-   
-    let coordinates = Coordinates(latitude: 46.830290, longitude: 35.424191)
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        weatherManager.fetchCurrentWeatherWith(coordinates: coordinates) { (result) in
-            switch result {
-            case .Succes(let currentWeather):
-                self.updateUIWith(currentWeather)
-            case .Failure(let error as NSError):
-                let alertController = UIAlertController(title: "Unable to get data", message: "\(error.localizedDescription)", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                alertController.addAction(okAction)
-                self.present(alertController, animated: true, completion: nil)
-            default: break
-
-            }
-        }
+        presenter.viewDelegate = self
         
         view.addSubview(locationLabel)
         view.addSubview(weatherIconImageView)
         view.addSubview(stackView)
         view.addSubview(temperatureLabel)
-        view.addSubview(appearentTemperatureLabel)
+        view.addSubview(apparentTemperatureLabel)
         
         setupView()
+        
+        presenter.getData(with: coordinates)
     }
     
-    func updateUIWith(_ currentWeather: CurrentWeather) {
-        weatherIconImageView.image = currentWeather.icon
-        pressureLabel.text = currentWeather.pressureString
-        temperatureLabel.text = currentWeather.temperatureString
-        humidityLabel.text = currentWeather.humidityString
-        appearentTemperatureLabel.text = currentWeather.appearentTemperatureString
+    func displayWeather(_ description: CurrentWeather) {
+        weatherIconImageView.image = description.icon
+        pressureLabel.text = description.pressureString
+        temperatureLabel.text = description.temperatureString
+        humidityLabel.text = description.humidityString
+        apparentTemperatureLabel.text = description.appearentTemperatureString
+    }
+    
+    func displayError(message: String) {
+        showAlert(title: "Weater-App", message: message)
+        
+        locationLabel.text = ""
+        weatherIconImageView.image = #imageLiteral(resourceName: "no-image")
+        pressureLabel.text = ""
+        temperatureLabel.text = ""
+        humidityLabel.text = ""
+        apparentTemperatureLabel.text = ""
     }
     
     fileprivate func setupView() {
@@ -118,8 +118,7 @@ class WeatherViewController: UIViewController {
         
         temperatureLabel.setAnchor(top: stackView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, bottom: nil, paddingTop: 50, paddingLeft: 10, paddingRight: 10, paddingBottom: 0)
         
-        appearentTemperatureLabel.setAnchor(top: temperatureLabel.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, bottom: nil, paddingTop: 30, paddingLeft: 10, paddingRight: 10, paddingBottom: 0)
+        apparentTemperatureLabel.setAnchor(top: temperatureLabel.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, bottom: nil, paddingTop: 30, paddingLeft: 10, paddingRight: 10, paddingBottom: 0)
     }
-    
 }
 

@@ -9,7 +9,7 @@
 import Foundation
 
 extension CurrentWeather: JSONDecodable {
-   
+    
     init?(JSON: [String : AnyObject]) {
         guard
             let temperature = JSON["temperature"] as? Double,
