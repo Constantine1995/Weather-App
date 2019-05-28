@@ -10,8 +10,6 @@ import Foundation
 import UIKit
 
 protocol WeatherViewDelegate: class {
-//    func displayWeather(_ description: (city: String, temperature: String, apparentTemperature: String, humidity: String, pressure: String, icon: UIImage))
-
     func displayWeather(_ description: CurrentWeather)
     func displayError(message: String)
 }

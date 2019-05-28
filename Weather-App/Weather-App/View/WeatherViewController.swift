@@ -18,7 +18,7 @@ class WeatherViewController: UIViewController, WeatherViewDelegate {
     
     let locationLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Helvetica", size: 25)
+        label.font = UIFont(name: "Helvetica", size: 30)
         label.text = "Melitopol"
         label.textColor = .white
         label.textAlignment = .center
@@ -27,7 +27,7 @@ class WeatherViewController: UIViewController, WeatherViewDelegate {
     
     let pressureLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Helvetica", size: 25)
+        label.font = UIFont.systemFont(ofSize: 25, weight: .light)
         label.textColor = .white
         label.textAlignment = .center
         return label
@@ -35,7 +35,7 @@ class WeatherViewController: UIViewController, WeatherViewDelegate {
     
     let humidityLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Helvetica", size: 25)
+        label.font = UIFont.systemFont(ofSize: 25, weight: .light)
         label.textColor = .white
         label.textAlignment = .center
         return label
@@ -58,7 +58,7 @@ class WeatherViewController: UIViewController, WeatherViewDelegate {
     
     let temperatureLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Helvetica", size: 75)
+        label.font = UIFont.systemFont(ofSize: 100, weight: .ultraLight)
         label.textColor = .white
         label.textAlignment = .center
         return label
@@ -66,10 +66,21 @@ class WeatherViewController: UIViewController, WeatherViewDelegate {
     
     let apparentTemperatureLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Helvetica", size: 25)
+        label.font = UIFont.systemFont(ofSize: 30, weight: .light)
         label.textColor = .white
         label.textAlignment = .center
         return label
+    }()
+    
+    let refreshButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.titleLabel?.font = UIFont(name: "Helvetica", size: 20)
+        button.setTitle("Refresh", for: .normal)
+        button.tintColor = #colorLiteral(red: 0.6745098039, green: 0.8732770085, blue: 0.9054248929, alpha: 1)
+        button.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        button.setShadow()
+        button.addTarget(self, action: #selector(refreshActionButton(_ :)), for: .touchUpInside)
+        return button
     }()
     
     override func viewDidLoad() {
@@ -81,6 +92,7 @@ class WeatherViewController: UIViewController, WeatherViewDelegate {
         view.addSubview(stackView)
         view.addSubview(temperatureLabel)
         view.addSubview(apparentTemperatureLabel)
+        view.addSubview(refreshButton)
         
         setupView()
         
@@ -108,17 +120,25 @@ class WeatherViewController: UIViewController, WeatherViewDelegate {
     
     fileprivate func setupView() {
         
-        locationLabel.setAnchor(top: view.topAnchor, left: nil, right: nil, bottom: nil, paddingTop: 50, paddingLeft: 0, paddingRight: 0, paddingBottom: 0)
+        locationLabel.setAnchor(top: view.safeAreaLayoutGuide.topAnchor, left: nil, right: nil, bottom: nil, paddingTop: 15, paddingLeft: 0, paddingRight: 0, paddingBottom: 0)
         locationLabel.setCenterXAnchor(view)
         
-        weatherIconImageView.setAnchor(top: locationLabel.bottomAnchor, left: nil, right: nil, bottom: nil, paddingTop: 70, paddingLeft: 0, paddingRight: 0, paddingBottom: 0)
+        weatherIconImageView.setAnchor(top: locationLabel.bottomAnchor, left: nil, right: nil, bottom: nil, paddingTop: 20, paddingLeft: 0, paddingRight: 0, paddingBottom: 0, width: 180, height: 180)
         weatherIconImageView.setCenterXAnchor(locationLabel)
         
-        stackView.setAnchor(top: weatherIconImageView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, bottom: nil, paddingTop: 50, paddingLeft: 10, paddingRight: 10, paddingBottom: 0)
+        stackView.setAnchor(top: weatherIconImageView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, bottom: nil, paddingTop: 30, paddingLeft: 10, paddingRight: -10, paddingBottom: 0, width: view.frame.width, height: 50)
         
-        temperatureLabel.setAnchor(top: stackView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, bottom: nil, paddingTop: 50, paddingLeft: 10, paddingRight: 10, paddingBottom: 0)
+        temperatureLabel.setAnchor(top: weatherIconImageView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, bottom: apparentTemperatureLabel.topAnchor, paddingTop: 70, paddingLeft: 10, paddingRight: -10, paddingBottom: -10)
         
-        apparentTemperatureLabel.setAnchor(top: temperatureLabel.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, bottom: nil, paddingTop: 30, paddingLeft: 10, paddingRight: 10, paddingBottom: 0)
+        apparentTemperatureLabel.setAnchor(top: temperatureLabel.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, bottom: nil, paddingTop: 25, paddingLeft: 10, paddingRight: -10, paddingBottom: 0)
+        
+        refreshButton.setAnchor(top: nil, left: view.leftAnchor, right: view.rightAnchor, bottom: view.bottomAnchor, paddingTop: 0, paddingLeft: 120, paddingRight: -120, paddingBottom: -20, width: 50, height: 40)
+        
+        refreshButton.setCenterXAnchor(view)
+    }
+    
+    @objc func refreshActionButton(_ : UIButton) {
+        presenter.getData(with: coordinates)
     }
 }
 
